@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+	<appSettings>
+		<add key="AppName" value="TWBA"/>
+		<add key="Version" value="1.0.0"/>
+		<add key="ApiUrl" value="https://api.example.com"/>
+		<add key="hash" value="cf4a7303cd298b0ca73a6ab8844aa8daa262becfa3788633abb77882bb5aebc1e3f603fabb64628da34b1c0e2635416cd76eeca80a40522e22372f91201b443b"/>
+	</appSettings>
+</configuration>
