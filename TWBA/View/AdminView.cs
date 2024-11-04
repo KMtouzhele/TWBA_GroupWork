@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using TheWeakestBankOfAntarctica.Controller;
 using TheWeakestBankOfAntarctica.Model;
+using TheWeakestBankOfAntarctica.Utility;
 
 namespace TheWeakestBankOfAntarctica.View
 {
@@ -17,6 +18,7 @@ namespace TheWeakestBankOfAntarctica.View
                 Console.Clear();
                 Console.WriteLine("1. Customer Accounts");
                 Console.WriteLine("2. Account Balance");
+                Console.WriteLine("3. Account Menu");
                 Console.WriteLine("0. Go Back to Main Menu");
                 Console.Write("Enter your choice: ");
 
@@ -29,6 +31,9 @@ namespace TheWeakestBankOfAntarctica.View
                             break;
                         case 2:
                             GetCustomerBalance();
+                            break;
+                        case 3:
+                            AccountMenu();
                             break;
                         case 0:
                             Console.WriteLine("Returning to Main Menu...");
@@ -96,9 +101,19 @@ namespace TheWeakestBankOfAntarctica.View
 
             UserController.CreateCustomer(govId, name, lName, email, password, homeAddress, phoneNumber, initialBalance);
         }
-
+        /* CWE-862: Missing Authorization
+         * Patched by : Kaimo Li
+         * Description: 1. I have implemented a method in UtilityFunctions.cs -> IsUserAuthorizedToAddAdmin that checks if the user is authorized to add an admin
+         *              2. I only allow the user to add an admin if they are authorized, otherwise I return "You are not authorized"
+         */
         private static void AddNewEmployee()
         {
+            bool isAuthorized = UtilityFunctions.IsUserAuthorizedToAddAdmin("");
+            if (!isAuthorized)
+            {
+                Console.WriteLine("You are not authorized to add an admin");
+                return;
+            }
             Console.WriteLine("Please enter the First name");
             string name = Console.ReadLine();
             Console.WriteLine("Please enter the Last name");
@@ -144,7 +159,7 @@ namespace TheWeakestBankOfAntarctica.View
                     switch (choice)
                     {
                         case 1:
-                            
+                            AddNewEmployee();
                             break;
                         case 2:
                             AddNewEmployee();

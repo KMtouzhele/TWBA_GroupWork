@@ -93,7 +93,8 @@ namespace TheWeakestBankOfAntarctica.View
         {
             Console.WriteLine("Enter the Account Number");
             string accountNumber = Console.ReadLine();
-            AccountController.CloseAccount(accountNumber);
+            string response = AccountController.CloseAccount(accountNumber);
+            Console.WriteLine(response);
 
         }
         public static void Search()

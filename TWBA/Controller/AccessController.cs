@@ -8,7 +8,7 @@ namespace TheWeakestBankOfAntarctica.View
 {
     public class AccessController
     {
-
+        private static Dictionary<string, string> sessions = new Dictionary<string, string>();
         public static bool IsLoggedIn { get; private set; } // A global state that tells us if the user is authenticated or not
         public static string LoggedInUser { get; private set; } // username of the authenticated used if they are authenticated otherwise null;
         public static string Username { get; private set; }  // Stores the username of the user upon successful login.
@@ -42,13 +42,44 @@ namespace TheWeakestBankOfAntarctica.View
             return false;
         }
 
-        public static bool Logout()
+        public static void Logout(string sessionToken)
         {
-            IsLoggedIn = false ;
-            LoggedInUser = null;
-            Username = null;   // Clear stored username
-            Password = null;   // Clear stored password
-            return true;
+            if (sessions.ContainsKey(sessionToken))
+            {
+                sessions.Remove(sessionToken);
+            }
+        }
+        /* CWE-287 : Improper Authentication
+         * Patched by : Kaimo Li
+         * Description : 1. I replaced the global `IsLoggedIn` flag with a session-based token system to securely track user authentication.
+         * 2. The `Login` method no longer stores passwords in memory; instead, it generates a secure session token after successful authentication.
+         * 3. The session token is used to verify user authentication in subsequent requests, and it is invalidated upon logout.
+         */
+        public static string Authenticate(string login, string password)
+        {
+            string createHashBasedOnUserInput = UtilityFunctions.CreateHash(login, password);
+            string storedHash = UtilityFunctions.GetValueFromAppConfig("hash");
+
+            if (createHashBasedOnUserInput.Equals(storedHash))
+            {
+                string sessionToken = GenerateSessionToken(login);
+                sessions[sessionToken] = login;
+                return sessionToken;
+            }
+            return null;
+        }
+        public static bool IsAuthenticated(string sessionToken)
+        {
+            return sessions.ContainsKey(sessionToken);
+        }
+        public static string GetLoggedInUser(string sessionToken)
+        {
+            return sessions.ContainsKey(sessionToken) ? sessions[sessionToken] : null;
+        }
+
+        private static string GenerateSessionToken(string username)
+        {
+            return Convert.ToBase64String(Guid.NewGuid().ToByteArray());
         }
     }
 }

@@ -31,10 +31,10 @@ namespace TheWeakestBankOfAntarctica.Controller
            return DataAdapter.GetAccountByAccountNumber(accountNumber);
         }
 
-        public static bool CloseAccount(string accountNumber)
+        public static string CloseAccount(string accountNumber)
         {
-            DataAdapter.CloseAccount(accountNumber);
-            return true;
+            string response = DataAdapter.CloseAccount(accountNumber);
+            return response;
         }
     }
 }

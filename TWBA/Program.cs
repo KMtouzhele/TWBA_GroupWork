@@ -48,8 +48,10 @@ namespace TheWeakestBankOfAntarctica
             } while (key.Key != ConsoleKey.Enter);
 
             Console.WriteLine();
+            string sessionToken = AccessController.Authenticate(login, password);
+            bool isAuthenticated = AccessController.IsAuthenticated(sessionToken);
 
-            return AccessController.Login(login, password);  // CWE-798
+            return isAuthenticated;  // CWE-798
             // This method prompts the user to enter a login name and password, then calls AccessController to validate credentials.
             // The input values are stored in the variables 'login' and 'password' for use in authentication.
         }
